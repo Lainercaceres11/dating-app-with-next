@@ -17,7 +17,7 @@ export default function Auth() {
   const { user, loading: authLoading } = useAuth();
 
   useEffect(() => {
-    if (user && !loading) {
+    if (user && !authLoading) {
       router.push("/");
     }
   }, [user, authLoading, router, loading]);
@@ -35,7 +35,9 @@ export default function Auth() {
           password: password,
         });
 
-        if (error) throw error;
+        if (error) {
+          console.log(error);
+        }
 
         if (data && !data.session) {
           setError("Please check your email");
@@ -47,7 +49,9 @@ export default function Auth() {
           password: password,
         });
 
-        if (error) throw error;
+        if (error) {
+          console.log(error);
+        }
       }
     } catch (error: unknown) {
       setError(error as string);

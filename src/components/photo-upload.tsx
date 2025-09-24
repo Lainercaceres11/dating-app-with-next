@@ -11,6 +11,8 @@ export default function PhotoUpload({ onPhotoUploaded }: PhotoUploadProps) {
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  console.log(error);
+
   const handleFileUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
 
