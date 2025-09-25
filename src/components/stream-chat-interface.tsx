@@ -60,15 +60,6 @@ export default function StreamChatInterface({
     setShowScrollButton(false);
   }
 
-  function handleScroll() {
-    if (messagesContainerRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } =
-        messagesContainerRef.current;
-      const isNearBottom = scrollHeight - scrollTop - clientHeight < 100;
-      setShowScrollButton(!isNearBottom);
-    }
-  }
-
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
@@ -76,11 +67,20 @@ export default function StreamChatInterface({
   useEffect(() => {
     const container = messagesContainerRef.current;
 
+    function handleScroll() {
+      if (messagesContainerRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } =
+          messagesContainerRef.current;
+        const isNearBottom = scrollHeight - scrollTop - clientHeight < 100;
+        setShowScrollButton(!isNearBottom);
+      }
+    }
+
     if (container) {
       container.addEventListener("scroll", handleScroll);
       return () => container.removeEventListener("scroll", handleScroll);
     }
-  }, [handleScroll]);
+  }, []);
 
   useEffect(() => {
     setShowVideoCall(false);
@@ -136,6 +136,7 @@ export default function StreamChatInterface({
         chatChannel.on("message.new", (event: Event) => {
           if (event.message) {
             if (event.message.text?.includes(`📹 Video call invitation`)) {
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               const customData = event.message as any;
 
               if (customData.caller_id !== userId) {
@@ -198,7 +199,7 @@ export default function StreamChatInterface({
         client.disconnectUser();
       }
     };
-  }, [otherUser]);
+  }, [client, otherUser, router]);
 
   async function handleVideoCall() {
     try {
@@ -294,6 +295,31 @@ export default function StreamChatInterface({
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500 mx-auto"></div>
           <p className="mt-4 text-gray-600 dark:text-gray-400">
             Setting up chat...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 to-red-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">
+            Loading stream...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-pink-50 to-red-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
+        <div className="text-center max-w-md mx-auto p-8">
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
+            {error || "Something went wrong. Please try again."}
           </p>
         </div>
       </div>
