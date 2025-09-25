@@ -28,7 +28,7 @@ export default function ListMatchesPage() {
     }
 
     loadUserMatches();
-  }, [matches]);
+  }, []);
 
   if (error && !loading) {
     return (
