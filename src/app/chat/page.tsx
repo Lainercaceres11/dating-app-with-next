@@ -65,7 +65,7 @@ export default function ChatPage() {
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500 mx-auto"></div>
           <p className="mt-4 text-gray-600 dark:text-gray-400">
-            Loading your matches...
+            Loading your chats...
           </p>
         </div>
       </div>
