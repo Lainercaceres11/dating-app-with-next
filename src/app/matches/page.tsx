@@ -8,6 +8,7 @@ import CardMatches from "@/src/components/card-matches";
 import CardMatchesButton from "@/src/components/card-matches-button";
 import { likeUser } from "@/actions/matches/like-user";
 import MathNotification from "@/src/components/math-notification";
+import { useAuth } from "@/context/auth-context";
 
 export default function MatchesPage() {
   const [potencialMatches, setPotencialMatches] = useState<UserProfile[]>([]);
@@ -18,6 +19,12 @@ export default function MatchesPage() {
   const [matchedUser, setMatchedUser] = useState<UserProfile | undefined>(
     undefined
   );
+
+  const { user } = useAuth();
+
+  if (!user) {
+    router.push("/auth");
+  }
 
   useEffect(() => {
     async function loadUsers() {
